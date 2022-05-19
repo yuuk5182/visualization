@@ -1,3 +1,17 @@
+///////////////////////////////////////////////////////////////////////////////
+///                                                                         ///
+///     学籍番号:2072088　   氏名：山本勇樹                                 ///
+///                                                                         ///
+///     ビジュアライゼーション 最終課題                                     ///
+///                                                                         ///
+///                                                                         ///
+///     プログラム引用元                                                    ///
+///         「コンピュータグラフィックス OpenGL action3.c　（津村徳道）」   ///
+///         https://www.mi.tj.chiba-u.jp/~tsumura/OpenGL/action3.c          ///
+///                                                                         ///
+///                                                                         ///
+///////////////////////////////////////////////////////////////////////////////
+
 
 #include <stdlib.h>
 #include <GL/glut.h>
@@ -6,15 +20,17 @@
 #include <math.h>
 
 // ブロック数
-#define	I	11
+//#defineは第1引数を今後第2引数として扱ってくれる
+#define	I	12
 
 // 敵数
 #define	J	7
 #define RAD (M_PI / 180.0)
 
 // 自機の位置
+//typedef structは構造体にGeometryと命名することで今後の変数宣言時にstructキーワードの記述を省略できる．
 typedef struct {
-  float ShiftX;     
+  float ShiftX;
   float ShiftY;
   float ShiftZ;
   float RotateX;
@@ -50,8 +66,8 @@ double		ntime=0,ptime=0;
 double		die_ntime=0,die_ptime=0;
 
 // ブロックと敵の宣言と初期化
-double		block_x[I]={5,7,19,10,12,22,14,11,25,14,22};
-double		block_y[I]={0,0,1,1,2,2,5,6,5,9,8};
+double		block_x[I]={5,5,7,19,10,12,22,14,11,25,14,22};
+double		block_y[I]={0,3,0,1,1,2,2,5,6,5,9,8};
 double		block_z[I]={0};
 double		enemy_x[J]={0};	
 double		enemy_y[J]={0};	
@@ -69,65 +85,22 @@ float CameraX = 0.0;            /* カメラの位置（X座標） */
 float CameraY = 0.0;            /* カメラの位置（Y座標） */
 float CameraZ = 5.0;            /* カメラの位置（Z座標） */
 
-// 関数宣言
-void display(void);
-void geometrySet(Geometry geom);
-void keyboard(unsigned char key, int x, int y );
-void mouseButton(int button, int state, int x, int y );
-void mouseDrag(int x, int y);
-void myInit (char *windowTitle);
 
 
-/***********************************************************
-|  関数：main()
-|  説明：メイン関数
-|  引数：int argc       実行時引数の数
-|  引数：char** argv    実行時引数の内容（文字列配列）
-|  戻値：int            0:正常終了
-***********************************************************/
-int main(int argc, char** argv)
-{
-  glutInit(&argc, argv);
-  myInit(argv[0]);
 
-  // 自機位置の初期化
-  Cube.ShiftX = 0;
-  Cube.ShiftY = 0;
-  Cube.ShiftZ = 0;
-  Cube.RotateX = 0;
-  Cube.RotateY = 0;
-  Cube.RotateZ = 0;  
 
-  // 敵位置(青)の初期化
-  for(i=0;i<J;i++){
-	enemy_x[i]	=	30+rand()%30;
-	enemy_y[i]	=	rand()%10;
-  }
-
-  // 敵位置(緑)の初期化
-  for(i=0;i<J;i++){
-	enemy_z[i]	=	-5+rand()%10;
-	enemy_x2[i]	=	10+rand()%10;
-	enemy_y2[i]	=	rand()%10;
-  }
-
-  glutMainLoop(); 
-  
-  return( 0 );
-}
-
-// 描画関数(決まってる)
+// 描画関数(魔法の呪文)
 void drawString3D(const char *str, float charSize, float lineWidth)
 {
   glPushMatrix();
-  glPushAttrib(GL_LINE_BIT);
+  glPushAttrib(GL_LINE_BIT);    //カレントのライティングプロパティをセーブ
   glScaled(0.001 * charSize, 0.001 * charSize, 0.01);
   glLineWidth(lineWidth);
   while(*str){
     glutStrokeCharacter(GLUT_STROKE_ROMAN, *str);
     ++str;
   }
-  glPopAttrib();
+  glPopAttrib();    //セーブされたプロパティをリストア
   glPopMatrix();
 }
 
@@ -139,7 +112,7 @@ void drawString3D(const char *str, float charSize, float lineWidth)
 ***********************************************************/
 void display(void)
 {
-  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //gl_depth_buffer_bitで隠面消去
   glPushMatrix ();
   
   /* 視点の設定 */
@@ -147,12 +120,12 @@ void display(void)
 	      Cube.ShiftX, Cube.ShiftY+3, Cube.ShiftZ,  /* 注視点の位置 */
 	      0.0, 1.0, 0.0); /* カメラ上方向のベクトル */ 
   
-  glEnable(GL_DEPTH_TEST);    
+  glEnable(GL_DEPTH_TEST);  
  
   // 初期状態(文字の描画)
   if(die_flag==99){
     glPushMatrix ();
-    glColor3f( 1.0, 1.0, 1.0 );  
+    glColor3f( 1.0, 0.0, 0.0 );  
     glTranslatef(-3.5, 4.0, 0); 
     drawString3D("Press ' s ' to start", 5.0, 2.0); 
     glPopMatrix ();   
@@ -171,15 +144,16 @@ void display(void)
   else{
     glColor3f( 1.0, 1.0, 1.0 );   
   }
-  glutWireSphere (0.4,5.0,2.0);
+
+  glutSolidSphere(0.5, 20, 10);
   glPopMatrix ();   
   
-  // 初期位置の床
+  // 初期位置の床の描画
   glPushMatrix (); 
   glColor3f( 0.0,1.0,0.0 ); 
   glTranslatef(0.0,-0.5,0.0);
   glScalef(1.0,0.1,1.0);
-  if(Cube.ShiftX<0.1 && -0.1<Cube.ShiftX){
+  if(Cube.ShiftX<0.5 && -0.5<Cube.ShiftX){  //初期の床から球体が離れたら床をsolidからwireへ
     glutSolidCube(1.0);
   }
   else{
@@ -199,7 +173,7 @@ void display(void)
   
   // 敵の描画
   for(i=0;i<J;i++){
-    glPushMatrix ();   
+    glPushMatrix ();   //横から来る敵の描画
     glColor3f( 0.0,0.0,1.0 ); 
     glRotatef(-90,0.0,1.0,0.0);
     glTranslatef(0.0,enemy_y[i],enemy_x[i]);
@@ -207,7 +181,7 @@ void display(void)
     glutWireCone(0.25,0.5,10,2);
     glPopMatrix ();
     
-    glPushMatrix ();   
+    glPushMatrix ();    //奥からくる敵の描画  
     glColor3f( 0.0,1.0,0.0 ); 
     glTranslatef(enemy_x2[i],enemy_y2[i],enemy_z[i]);
 	glRotatef(ptime*100,0.0,0.0,1.0);
@@ -219,7 +193,7 @@ void display(void)
   for(i=0;i<I;i++){
     glPushMatrix (); 
     glTranslatef(block_x[i],block_y[i],block_z[i]);
-    if(i!=I-1){	 
+    if(i!=I-1){
       glColor3f( 0.50, 0.25, 0.25 ); 
     }
     else{
@@ -260,11 +234,11 @@ void timer(int value)
        
        // 左壁
        if(bL[i]<1 && -0.5<bL[i] && bU[i]<1 && bD[i]<1){
-	 limit_right[i]	=	0;
+           limit_right[i]	=	0;
        }
        else{
-	 limit_right[i]	=	1;
-	 t_limit_right		=	1;
+           limit_right[i]	=	1;
+           t_limit_right		=	1;
        }		    
        
        // 右壁
@@ -319,17 +293,6 @@ void timer(int value)
      }
      if(rise==1){
        max=100;
-     }
-
-     // 自機の回転
-     if(direction==0){
-       Rotate-= 1;
-     }
-     else{
-       Rotate+= 1;	
-     }
-     if( Cube.RotateZ > 360.0 ){	  
-       Cube.RotateZ -= 360.0;
      }
      
      // 自機の異動(右)
@@ -473,7 +436,7 @@ void mouseButton(int button, int state, int x, int y )
 		left=1;
       break;
 
-      // 真中クリックで始点変更
+      // 真中クリックで視点変更
     case GLUT_MIDDLE_BUTTON:
       PressButton = button;
       break;
@@ -561,6 +524,46 @@ void myInit (char *windowTitle)
   glLoadIdentity(); 
   gluPerspective(90.0, aspect, 1.0, 20.0);
   glMatrixMode(GL_MODELVIEW);
-  glutTimerFunc(15 , timer , 0);
+  glutTimerFunc(15 , timer , 0);    //指定の時間経過でコールバック関数を呼び出し
+
   
+}
+
+
+/***********************************************************
+|  関数：main()
+|  説明：メイン関数
+|  引数：int argc       実行時引数の数
+|  引数：char** argv    実行時引数の内容（文字列配列）
+|  戻値：int            0:正常終了
+***********************************************************/
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    myInit(argv[0]);
+
+    // 自機位置の初期化
+    Cube.ShiftX = 0;
+    Cube.ShiftY = 0;
+    Cube.ShiftZ = 0;
+    Cube.RotateX = 0;
+    Cube.RotateY = 0;
+    Cube.RotateZ = 0;
+
+    // 敵位置(青)の初期化
+    for (i = 0; i < J; i++) {
+        enemy_x[i] = 30 + rand() % 30;
+        enemy_y[i] = rand() % 10;
+    }
+
+    // 敵位置(緑)の初期化
+    for (i = 0; i < J; i++) {
+        enemy_z[i] = -5 + rand() % 10;
+        enemy_x2[i] = 10 + rand() % 10;
+        enemy_y2[i] = rand() % 10;
+    }
+
+    glutMainLoop();
+
+    return(0);
 }
