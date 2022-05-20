@@ -326,7 +326,7 @@ void timer(int value)
      }
      
      // °‚ÌŽ€–S”»’è
-     if(Cube.ShiftX>0 && Cube.ShiftY==-5){
+     if(Cube.ShiftX>-10 && Cube.ShiftY==-5){
        die_flag=0;  
      }
 		  
