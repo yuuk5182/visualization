@@ -21,6 +21,7 @@
 // ブロック数
 //#defineは第1引数を今後第2引数として扱ってくれる
 #define	I	12
+#define O   195
 
 // 敵数
 #define	J	7
@@ -67,6 +68,7 @@ double		die_ntime=0,die_ptime=0;
 // ブロックと敵の宣言と初期化
 double		block_x[I]={5,5,7,19,10,12,22,14,11,25,14,22};
 double		block_y[I]={0,3,0,1,1,2,2,5,6,5,9,8};
+double      fblock_x[O] = {-10, -9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60};
 double		block_z[I]={0};
 double		enemy_x[J]={0};	
 double		enemy_y[J]={0};	
@@ -183,7 +185,24 @@ void display(void)
 	glPopMatrix ();
   }
   
-  // ブロックの描画
+  // 床ブロックの描画
+  for (i = 0; i < O; i++) {
+      glPushMatrix();
+      glTranslatef(fblock_x[i], -1, 0);
+      glColor3f(1.0, 0.25, 0.25);
+      glutSolidCube(1.0);
+      glColor3f(0, 0, 0);
+      glutWireCube(1.0);
+      glLineWidth(5.0);   //ブロックの線の描画
+      glScaled(1.0, 0.33, 1.0);
+      glutWireCube(1.0);  //横線の描画
+      glScaled(0.5, 1.0, 1.0);
+      glutWireCube(1.0);  //中央の四角の描画
+      glLineWidth(1.0);   //線の太さをもとに戻す
+      glPopMatrix();
+  }
+
+  // 空中ブロックの描画
   for(i=0;i<I;i++){
     glPushMatrix (); 
     glTranslatef(block_x[i],block_y[i],block_z[i]);
