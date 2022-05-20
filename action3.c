@@ -76,7 +76,7 @@ double		enemy_y2[J]={0};
 double		bL[I],bR[I],bU[I],bD[I]/*,bF[I],bB[I]*/,R[J],R2[J];
 double		nView[2];
 int		jcount=0;
-double          Cv=0.01;
+double          Cv=0.03;
 float CameraAzimuth   = 90.0;   /* カメラの位置（方位角） */
 float CameraElevation = 0.0;    /* カメラの位置（仰角） */
 float CameraDistance  = 5.0;    /* カメラの位置（原点からの距離） */
@@ -110,7 +110,7 @@ void display(void)
   glPushMatrix ();
   
   /* 視点の設定 */
-  gluLookAt(  Cube.ShiftX+CameraX, Cube.ShiftY+CameraY+3, Cube.ShiftZ+CameraZ,  /* カメラの位置 */
+  gluLookAt(  Cube.ShiftX+CameraX, Cube.ShiftY+CameraY+3, Cube.ShiftZ+CameraZ+5,  /* カメラの位置 */
 	      Cube.ShiftX, Cube.ShiftY+3, Cube.ShiftZ,  /* 注視点の位置 */
 	      0.0, 1.0, 0.0); /* カメラ上方向のベクトル */ 
   
@@ -120,8 +120,8 @@ void display(void)
   if(die_flag==99){
     glPushMatrix ();
     glColor3f( 1.0, 0.0, 0.0 );  
-    glTranslatef(-3.5, 4.0, 0); 
-    drawString3D("Press ' s ' to start", 5.0, 2.0); 
+    glTranslatef(-7, 4.0, 0); 
+    drawString3D("Press ' s ' to start", 10.0, 2.0); 
     glPopMatrix ();   
   }
   
@@ -139,7 +139,7 @@ void display(void)
     glColor3f( 1.0, 1.0, 1.0 );   
   }
 
-  glutWireSphere(0.5, 5, 5);
+  glutWireSphere(0.5, 10, 10);
   glPopMatrix ();   
   
   // 初期位置の床の描画
@@ -195,12 +195,12 @@ void display(void)
     }glutSolidCube(1.0);
     glColor3f( 0, 0, 0 ); 
     glutWireCube(1.0);
-    glLineWidth(5.0);
+    glLineWidth(5.0);   //ブロックの線の描画
     glScaled(1.0, 0.33, 1.0);
-    glutWireCube(1.0);
-    glScaled(0.33, 1.0, 1.0);
-    glutWireCube(1.0);
-    glLineWidth(1.0);
+    glutWireCube(1.0);  //横線の描画
+    glScaled(0.5, 1.0, 1.0);
+    glutWireCube(1.0);  //中央の四角の描画
+    glLineWidth(1.0);   //線の太さをもとに戻す
     glPopMatrix (); 
   }
 
@@ -396,8 +396,8 @@ void keyboard(unsigned char key, int x, int y )
     // スペースでジャンプ
   case ' ':
 	  jcount++;
-	  if(jcount<3){
-		Vy	=	0.03;
+	  if(jcount<2){
+		Vy	=	0.046;
 	  }	 
 	  jump=1; 
     break;
