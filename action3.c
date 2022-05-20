@@ -145,16 +145,6 @@ void display(void)
   glPopMatrix ();   
 
   
-  // ê‘è∞ÇÃï`âÊ
-  for(i=0;i<I;i++){
-    glPushMatrix ();   
-	glColor3f( 1.0,0.0,0.0 ); 
-	glTranslatef(55.5,-0.5,0.0);
-	glScalef(100.0,0.1,5.0);
-	glutSolidCube(1.0);
-	glPopMatrix ();
-  }
-  
   // ìGÇÃï`âÊ
   for(i=0;i<J;i++){
     glPushMatrix ();   //â°Ç©ÇÁóàÇÈìGÇÃï`âÊ
@@ -174,21 +164,23 @@ void display(void)
   }
   
   // è∞ÉuÉçÉbÉNÇÃï`âÊ
-  for (i = 0; i < O; i++) {
-      glPushMatrix();
-      glTranslatef(fblock_x[i], -1, 0);
-      glColor3f(0.96, 0.64, 0.38);
-      glutSolidCube(1.0);
-      glColor3f(0, 0, 0);
-      glutWireCube(1.0);
-      glLineWidth(5.0);   //ÉuÉçÉbÉNÇÃê¸ÇÃï`âÊ
-      glScaled(0.02, 1.0, 1.0);
-      glutWireCube(1.0);  //ècê¸ÇÃï`âÊ
-      glScaled(50, 0, 1.0);
-      glutWireCube(1.0);
-      glLineWidth(1.0);   //ê¸ÇÃëæÇ≥ÇÇ‡Ç∆Ç…ñﬂÇ∑
-      glPopMatrix();
-  }
+      for (i = 0; i < O; i++) {
+          glPushMatrix();
+          glTranslatef(fblock_x[i], -1, 0);
+          glColor3f(0.96, 0.64, 0.38);
+          glutSolidCube(1.0);
+          glColor3f(0, 0, 0);
+          glutWireCube(1.0);
+          glLineWidth(5.0);   //ÉuÉçÉbÉNÇÃê¸ÇÃï`âÊ
+          glScaled(0.02, 1.0, 1.0);
+          glutWireCube(1.0);  //ècê¸ÇÃï`âÊ
+          glScaled(50, 0, 1.0);
+          glutWireCube(1.0);
+          glLineWidth(1.0);   //ê¸ÇÃëæÇ≥ÇÇ‡Ç∆Ç…ñﬂÇ∑
+          glPopMatrix();
+      }
+
+  
 
   // ãÛíÜÉuÉçÉbÉNÇÃï`âÊ
   for(i=0;i<I;i++){
@@ -334,7 +326,7 @@ void timer(int value)
      }
      
      // è∞ÇÃéÄñSîªíË
-     if(Cube.ShiftX>5 && Cube.ShiftY==0){
+     if(Cube.ShiftX>0 && Cube.ShiftY==-5){
        die_flag=0;  
      }
 		  
