@@ -58,7 +58,7 @@ int		t_limit_right	=	1;
 int		fall=1,fall_p=0;
 int		rise=1,rise_p=0;
 double          Rotate=0;
-double		mini=0,max=100;
+double		mini=-5,max=100;
 double		Vy;
 
 // ŠÔ•Ï”‚ÌéŒ¾‚Æ‰Šú‰»
@@ -143,19 +143,7 @@ void display(void)
 
   glutWireSphere(0.5, 10, 10);
   glPopMatrix ();   
-  
-  // ‰ŠúˆÊ’u‚Ì°‚Ì•`‰æ
-  glPushMatrix (); 
-  glColor3f( 0.0,1.0,0.0 ); 
-  glTranslatef(0.0,-0.5,0.0);
-  glScalef(1.0,0.1,1.0);
-  if(Cube.ShiftX<0.5 && -0.5<Cube.ShiftX){  //‰Šú‚Ì°‚©‚ç‹…‘Ì‚ª—£‚ê‚½‚ç°‚ğsolid‚©‚çwire‚Ö
-    glutSolidCube(1.0);
-  }
-  else{
-    glutWireCube(1.0);
-  }
-  glPopMatrix ();
+
   
   // Ô°‚Ì•`‰æ
   for(i=0;i<I;i++){
@@ -302,7 +290,7 @@ void timer(int value)
 
      // ˆÚ“®”ÍˆÍ‚Ì§Œä(ã‰º)
      if(fall==1){
-       mini=0;
+       mini=-5;
      }
      if(rise==1){
        max=100;
