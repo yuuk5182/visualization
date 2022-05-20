@@ -177,15 +177,15 @@ void display(void)
   for (i = 0; i < O; i++) {
       glPushMatrix();
       glTranslatef(fblock_x[i], -1, 0);
-      glColor3f(1.0, 0.25, 0.25);
+      glColor3f(0.96, 0.64, 0.38);
       glutSolidCube(1.0);
       glColor3f(0, 0, 0);
       glutWireCube(1.0);
       glLineWidth(5.0);   //ƒuƒƒbƒN‚Ìü‚Ì•`‰æ
-      glScaled(1.0, 0.33, 1.0);
-      glutWireCube(1.0);  //‰¡ü‚Ì•`‰æ
-      glScaled(0.5, 1.0, 1.0);
-      glutWireCube(1.0);  //’†‰›‚ÌŽlŠp‚Ì•`‰æ
+      glScaled(0.02, 1.0, 1.0);
+      glutWireCube(1.0);  //cü‚Ì•`‰æ
+      glScaled(50, 0, 1.0);
+      glutWireCube(1.0);
       glLineWidth(1.0);   //ü‚Ì‘¾‚³‚ð‚à‚Æ‚É–ß‚·
       glPopMatrix();
   }
