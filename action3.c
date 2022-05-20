@@ -103,12 +103,7 @@ void drawString3D(const char *str, float charSize, float lineWidth)
   glPopMatrix();
 }
 
-/**********************************************************
-|  関数：display()
-|  説明：「１枚の」グラフィック描画イベント処理
-|  引数：なし
-|  戻値：なし
-***********************************************************/
+
 void display(void)
 {
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //gl_depth_buffer_bitで隠面消去
@@ -144,7 +139,7 @@ void display(void)
     glColor3f( 1.0, 1.0, 1.0 );   
   }
 
-  glutSolidSphere(0.5, 20, 10);
+  glutWireSphere(0.5, 5, 5);
   glPopMatrix ();   
   
   // 初期位置の床の描画
@@ -198,8 +193,14 @@ void display(void)
     else{
       glColor3f( 0.5, 1.0, 0.5 ); 
     }glutSolidCube(1.0);
-    glColor3f( 1.0, 1.0, 0.0 ); 
+    glColor3f( 0, 0, 0 ); 
     glutWireCube(1.0);
+    glLineWidth(5.0);
+    glScaled(1.0, 0.33, 1.0);
+    glutWireCube(1.0);
+    glScaled(0.33, 1.0, 1.0);
+    glutWireCube(1.0);
+    glLineWidth(1.0);
     glPopMatrix (); 
   }
 
@@ -208,12 +209,7 @@ void display(void)
   glutSwapBuffers();
 }
 
-/***********************************************************
-|  関数：timer(int timerID)
-|  説明：タイマー（設定時間経過）イベント処理
-|  引数：int timerID    イベントが発生したタイマーの識別ID
-|  戻値：なし
-***********************************************************/
+
 void timer(int value)
  {
    
@@ -292,14 +288,25 @@ void timer(int value)
      if(rise==1){
        max=100;
      }
+
+     // 自機の回転
+     if (direction == 0) {  //右に移動しているときは右回転
+         Rotate -= 1;
+     }
+     else {
+         Rotate += 1;
+     }
+     if (Cube.RotateZ > 360.0) {
+         Cube.RotateZ -= 360.0;
+     }
      
-     // 自機の異動(右)
+     // 自機の移動(右)
      if(right==1 && t_limit_right == 1){
        Cube.ShiftX+=Cv;
        direction=0;
      }
      
-     // 自機の異動(左)
+     // 自機の移動(左)
      if(left==1 && t_limit_left == 1){
        Cube.ShiftX-=Cv;
        direction=1;
@@ -326,11 +333,11 @@ void timer(int value)
 		  
      // 敵との当たり判定
      for(i=0;i<J;i++){
-       R[i]	=	sqrt(pow(Cube.ShiftX+enemy_x[i],2.0)+pow(Cube.ShiftY-enemy_y[i],2.0));
+       R[i]	=	sqrt(pow(Cube.ShiftX+enemy_x[i],2.0)+pow(Cube.ShiftY-enemy_y[i],2.0));  //横からの敵との当たり判定
        if(R[i]<0.5){
 	 die_flag=0;
        }
-       R2[i]	=	sqrt(pow(Cube.ShiftX-enemy_x2[i],2.0)
+       R2[i]	=	sqrt(pow(Cube.ShiftX-enemy_x2[i],2.0)   //奥からの敵との当たり判定
 			     +pow(Cube.ShiftY-enemy_y2[i],2.0)
 			     +pow(Cube.ShiftZ-enemy_z[i],2.0));
        if(R2[i]<0.5){
@@ -381,14 +388,7 @@ void timer(int value)
 
 
 
- /***********************************************************
-|  関数：keyboard()
-|  説明：キーボードが押された時のイベント処理
-|  引数：unsigned char key  押されたキーの文字コード
-|  引数：int x              キーが押されたときのマウスポインタのX座標
-|  引数：int y              キーが押されたときのマウスポインタのY座標
-|  戻値：なし
-***********************************************************/
+
 void keyboard(unsigned char key, int x, int y )
 {
   switch( key ) {
@@ -412,15 +412,7 @@ void keyboard(unsigned char key, int x, int y )
   x = y = 0;
 } 
 
-/***********************************************************
-|  関数：mouseButton()
-|  説明：マウスのボタン操作時のイベント処理
-|  引数：int button     操作したマウスボタンの番号
-|  引数：int state      操作の種類 GLUT_DOWN（押す）かGLUT_UP（離す）
-|  引数：int x          キーが押されたときのマウスポインタのX座標
-|  引数：int y          キーが押されたときのマウスポインタのY座標
-|  戻値：なし
-***********************************************************/
+
 void mouseButton(int button, int state, int x, int y )
 {
   if (state == GLUT_DOWN)
@@ -456,13 +448,7 @@ void mouseButton(int button, int state, int x, int y )
 }
 
 
-/***********************************************************
-|  関数：mouseDrag()
-|  説明：画面上でマウスがドラッグされた時のイベント処理
-|  引数：int x          現在のマウスポインタのX座標
-|  引数：int y          現在のマウスポインタのY座標
-|  戻値：なし
-***********************************************************/
+
 void mouseDrag(int x, int y)
 {
   int xMove = x - xBegin;
@@ -495,12 +481,7 @@ void mouseDrag(int x, int y)
 }
 
 
-/***********************************************************
-|  関数：myInit()
-|  説明：ウインドウ表示と描画設定の初期化
-|  引数：char *windowTitle      ウインドウのタイトルバーに表示する文字列
-|  戻値：なし
-***********************************************************/
+
 void myInit (char *windowTitle)
 {
   int winWidth  = 400;
@@ -528,13 +509,7 @@ void myInit (char *windowTitle)
 }
 
 
-/***********************************************************
-|  関数：main()
-|  説明：メイン関数
-|  引数：int argc       実行時引数の数
-|  引数：char** argv    実行時引数の内容（文字列配列）
-|  戻値：int            0:正常終了
-***********************************************************/
+
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
