@@ -21,12 +21,16 @@
 
 // ブロック数
 //#defineは第1引数を今後第2引数として扱ってくれる
-#define	I	43
-#define O   195
+#define	I	43  //空中ブロック配列用変数
+#define O   195 //床ブロック用配列変数
+#define D   6   //土管用配列変数
 
 // 敵数
 #define	J	7
 #define RAD (M_PI / 180.0)
+
+//mySolidSylinder用
+#define PI2 2.0*3.1415926534
 
 // 自機の位置
 //typedef structは構造体にGeometryと命名することで今後の変数宣言時にstructキーワードの記述を省略できる．
@@ -69,7 +73,9 @@ double		die_ntime=0,die_ptime=0;
 // ブロックと敵の宣言と初期化
 double		block_x[I]={6,10,11,12,12,13,14,65,66,67,68,69,70,71,72,73,74,75,80,81,82,83,83,89,90,95,98,98,101,107,110,111,112,117,118,118,119,119,120,158,159,160,161};
 double		block_y[I]={3,3,3,3,7,3,3,3,3,3,7,7,7,7,7,7,7,7,7,7,7,7,3,3,3,3,3,7,3,3,7,7,7,7,7,3,7,3,7,3,3,3,3};
-double      fblock_x[O] = {-10, -9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60};
+double      fblock_x[O] = {-10, -9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77};
+double      dblock_x[D] = { 18.5,28.5,36.5,47.5,153.5,169.5 };
+double      dblock_height[D] = { 2,3,4,4,2,2 };
 double		block_z[I]={0};
 double		enemy_x[J]={0};	
 double		enemy_y[J]={0};	
@@ -88,7 +94,83 @@ float CameraY = 0.0;            /* カメラの位置（Y座標） */
 float CameraZ = 5.0;            /* カメラの位置（Z座標） */
 
 
+//wire円柱関数
+void myWireCylinder(float r, float h, int n)
+{
+    float x, y, z, dq;
+    int i;
 
+    dq = PI2 / (float)n;
+    y = 0.5 * h;
+    glPushMatrix();
+    glRotatef(-dq * 180.0 / PI2, 0.0, 1.0, 0.0);
+    glBegin(GL_LINES);
+    for (i = 0; i < n; i++) {
+        x = r * cos(dq * (float)i);
+        z = r * sin(dq * (float)i);
+        glVertex3f(x, y, z);
+        glVertex3f(x, -y, z);
+    }
+    glEnd();
+
+    glBegin(GL_LINE_LOOP);
+    for (i = 0; i < n; i++) {
+        x = r * cos(dq * (float)i);
+        z = r * sin(dq * (float)i);
+        glVertex3f(x, y, z);
+    }
+    glEnd();
+
+    glBegin(GL_LINE_LOOP);
+    for (i = 0; i < n; i++) {
+        x = r * cos(dq * (float)i);
+        z = r * sin(dq * (float)i);
+        glVertex3f(x, -y, z);
+    }
+    glEnd();
+    glPopMatrix();
+}
+
+
+//塗りつぶし円柱関数
+void mySolidCylinder(float r, float h, int n)
+{
+    float x, y, z, dq;
+    int i;
+
+    glEnable(GL_NORMALIZE);
+    dq = PI2 / (float)n;
+    y = 0.5 * h;
+    glPushMatrix();
+    glRotatef(-dq * 180.0 / PI2, 0.0, 0.1, 0.0);
+    glBegin(GL_QUAD_STRIP);
+    for (i = 0; i <= n; i += 1) {
+        x = r * cos(dq * (float)i);
+        z = r * sin(dq * (float)i);
+        glNormal3f(x, 0, z);
+        glVertex3f(x, y, z);
+        glVertex3f(x, -y, z);
+    }
+    glEnd();
+    glBegin(GL_POLYGON);
+    glNormal3f(0.0, -1.0, 0.0);
+    for (i = 0; i < n; i += 1) {
+        x = r * cos(dq * (float)i);
+        z = r * sin(dq * (float)i);
+        glVertex3f(x, -y, z);
+    }
+    glEnd();
+    glBegin(GL_POLYGON);
+    glNormal3f(0.0, 1.0, 0.0);
+    for (i = 0; i < n; i += 1) {
+        x = r * cos(dq * (float)i);
+        z = r * sin(dq * (float)i);
+        glVertex3f(x, y, z);
+    }
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_NORMALIZE);
+}
 
 
 // 描画関数(魔法の呪文)
@@ -122,9 +204,8 @@ void display(void)
   //背景の水色の描画
   glPushMatrix();
   glColor3f(0.39, 0.58, 0.93);
-  glTranslatef(90, 0, 5);
-  glScaled(250, 40, 15);
-  glutSolidCube(1.0);
+  glTranslatef(Cube.ShiftX, Cube.ShiftY, Cube.ShiftZ+5);
+  glutSolidSphere(15, 10, 10);
   glPopMatrix();
  
   // 初期状態(文字の描画)
@@ -189,6 +270,27 @@ void display(void)
           glPopMatrix();
       }
 
+      // 土管の描画
+      for (i = 0; i < D; i++) {
+          glPushMatrix();
+          glTranslatef(dblock_x[i], dblock_height[i]/2-0.5, 0);
+          glColor3f(0.13, 0.55, 0.13);
+          mySolidCylinder(1, dblock_height[i],24);
+          glColor3f(0, 0, 0);
+          myWireCylinder(1, dblock_height[i], 24);
+          glPopMatrix();
+      }
+
+      //土管の縁の描画
+      for (i = 0; i < D; i++) {
+          glPushMatrix();
+          glTranslatef(dblock_x[i], dblock_height[i] / 2 + 1 , 0);
+          glColor3f(0.13, 0.55, 0.13);
+          mySolidCylinder(1.2, dblock_height[i]/3, 24);
+          glColor3f(0, 0, 0);
+          myWireCylinder(1.2, dblock_height[i] / 3, 24);
+          glPopMatrix();
+      }
   
 
   // 空中ブロックの描画
