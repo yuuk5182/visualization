@@ -17,10 +17,11 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <math.h>
+#include <stdio.h>
 
 // ブロック数
 //#defineは第1引数を今後第2引数として扱ってくれる
-#define	I	12
+#define	I	43
 #define O   195
 
 // 敵数
@@ -58,7 +59,7 @@ int		t_limit_right	=	1;
 int		fall=1,fall_p=0;
 int		rise=1,rise_p=0;
 double          Rotate=0;
-double		mini=-5,max=100;
+double		mini=0,max=100;
 double		Vy;
 
 // 時間変数の宣言と初期化
@@ -66,8 +67,8 @@ double		ntime=0,ptime=0;
 double		die_ntime=0,die_ptime=0;
 
 // ブロックと敵の宣言と初期化
-double		block_x[I]={5,5,7,19,10,12,22,14,11,25,14,22};
-double		block_y[I]={0,3,0,1,1,2,2,5,6,5,9,8};
+double		block_x[I]={6,10,11,12,12,13,14,65,66,67,68,69,70,71,72,73,74,75,80,81,82,83,83,89,90,95,98,98,101,107,110,111,112,117,118,118,119,119,120,158,159,160,161};
+double		block_y[I]={3,3,3,3,7,3,3,3,3,3,7,7,7,7,7,7,7,7,7,7,7,7,3,3,3,3,3,7,3,3,7,7,7,7,7,3,7,3,7,3,3,3,3};
 double      fblock_x[O] = {-10, -9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60};
 double		block_z[I]={0};
 double		enemy_x[J]={0};	
@@ -116,7 +117,15 @@ void display(void)
 	      Cube.ShiftX, Cube.ShiftY+3, Cube.ShiftZ,  /* 注視点の位置 */
 	      0.0, 1.0, 0.0); /* カメラ上方向のベクトル */ 
   
-  glEnable(GL_DEPTH_TEST);  
+  glEnable(GL_DEPTH_TEST); 
+
+  //背景の水色の描画
+  glPushMatrix();
+  glColor3f(0.39, 0.58, 0.93);
+  glTranslatef(90, 0, 5);
+  glScaled(250, 40, 15);
+  glutSolidCube(1.0);
+  glPopMatrix();
  
   // 初期状態(文字の描画)
   if(die_flag==99){
@@ -282,7 +291,7 @@ void timer(int value)
 
      // 移動範囲の制御(上下)
      if(fall==1){
-       mini=-5;
+       mini=0;
      }
      if(rise==1){
        max=100;
@@ -326,7 +335,7 @@ void timer(int value)
      }
      
      // 床の死亡判定
-     if(Cube.ShiftX>-10 && Cube.ShiftY==-5){
+     if(Cube.ShiftX>-10 && Cube.ShiftY==-6){
        die_flag=0;  
      }
 		  
@@ -521,6 +530,10 @@ int main(int argc, char** argv)
     Cube.RotateX = 0;
     Cube.RotateY = 0;
     Cube.RotateZ = 0;
+    
+    //ブロック数確認のため（数えるのめんどい．．．）
+    int length = sizeof(block_x) / sizeof(block_x[0]);
+    printf("length of block_x is: %d",length);
 
     // 敵位置(青)の初期化
     for (i = 0; i < J; i++) {
