@@ -22,7 +22,7 @@
 // ブロック数
 //#defineは第1引数を今後第2引数として扱ってくれる
 //#define	I	43  //空中ブロック配列用変数
-//#define O   195 //床ブロック用配列変数
+//#define O   192 //床ブロック用配列変数
 #define D   6   //土管用配列変数
 //#define K   88  //階段ブロック用配列変数
 
@@ -293,7 +293,7 @@ void display(void)
 
   // ブロックの描画
   for(i=0;i<I;i++){
-      if (i <= 43){//空中ブロック部分
+      if (i <= 42){//空中ブロック部分
           glPushMatrix();
           glTranslatef(block_x[i], block_y[i], block_z[i]);
           glColor3f(0.50, 0.25, 0.25);
@@ -308,7 +308,7 @@ void display(void)
           glLineWidth(1.0);   //線の太さをもとに戻す
           glPopMatrix();
       }
-      else if (i <= 235) {//床ブロック部分
+      else if (i <= 234) {//床ブロック部分
           glPushMatrix();
           glTranslatef(block_x[i], -1, 0);
           glColor3f(0.96, 0.64, 0.38);
