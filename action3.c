@@ -232,6 +232,8 @@ void display(void)
     drawString3D("to change the viewpoint", 10.0, 1.0);
     glTranslatef(0,-10,0);
     drawString3D("Press 'Space' to jump", 10.0, 1.0);
+    glTranslatef(0, -10, 0);
+    drawString3D("Mouse click to move", 10.0, 1.0);
     glScaled(2, 2, 0);
     glPopMatrix ();   
   }
