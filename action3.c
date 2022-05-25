@@ -215,7 +215,7 @@ void display(void)
   glPushMatrix();
   glColor3f(0.39, 0.58, 0.93);
   glTranslatef(Cube.ShiftX, Cube.ShiftY, Cube.ShiftZ+5);
-  glutSolidSphere(15, 10, 10);
+  glutSolidSphere(15, 10, 10);  //solidCube‚¾‚ÆŠp‚Ì•”•ª‚ª•‚­Œ©‚¦‚éDsphere‚àáŠ±Œ©‚¦‚é‚¯‚Ç­‚µ‚Ü‚µH
   glPopMatrix();
  
   // ‰Šúó‘Ô(•¶š‚Ì•`‰æ)
@@ -223,7 +223,16 @@ void display(void)
     glPushMatrix ();
     glColor3f( 1.0, 0.0, 0.0 );  
     glTranslatef(-7, 4.0, 0); 
-    drawString3D("Press ' s ' to start", 10.0, 2.0); 
+    drawString3D("Press ' s ' to start", 10.0, 3.0);
+    glColor3f(0, 0, 0);
+    glScaled(0.5, 0.5, 0);
+    glTranslatef(0, 7, 0);
+    drawString3D("Click the center mouse button and drag", 10.0, 1.0);
+    glTranslatef(3, -2, 0);
+    drawString3D("to change the viewpoint", 10.0, 1.0);
+    glTranslatef(0,-10,0);
+    drawString3D("Press 'Space' to jump", 10.0, 1.0);
+    glScaled(2, 2, 0);
     glPopMatrix ();   
   }
   
