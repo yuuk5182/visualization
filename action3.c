@@ -262,7 +262,7 @@ void display(void)
     // “G‚Ì•`‰æ
     for (i = 0; i < J; i++) {
         glPushMatrix();   //‰¡‚©‚ç—ˆ‚é“G‚Ì•`‰æ
-        glColor3f(0.0, 0.0, 1.0);
+        glColor3f(1.0, 0.0, 0.0);
         glRotatef(-90, 0.0, 1.0, 0.0);
         glTranslatef(0.0, enemy_y[i], enemy_x[i]);
         glRotatef(ptime * 100, 0.0, 0.0, 1.0);
@@ -521,11 +521,11 @@ void timer(int value)
            enemy_x[i] += 0.0025;
            enemy_z[i] += 0.0025;
            if (enemy_x[i] > 0) {
-               enemy_y[i] = 1 + rand() % 8;
+               enemy_y[i] = rand() % 10;
                enemy_x[i] = enemy_x[i] - 170;
            }
            if (enemy_z[i] > 5) {
-               enemy_y2[i] = 1 + rand() % 8;
+               enemy_y2[i] = rand() % 10;
                enemy_x2[i] = 10 + rand() % 170;
                enemy_z[i] = -5;
            }
