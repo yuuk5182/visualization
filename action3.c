@@ -411,7 +411,8 @@ void timer(int value)
 	 if(block_y[i]<max){		
 	   max	=	block_y[i]-1;
 	 }
-	 rise	=	0;block_x[i];
+     rise = 0;
+     rise_p = block_x[i];
        }
        // ãˆÚ“®”»’è
        if(Cube.ShiftX<rise_p-0.9 || rise_p+0.9<Cube.ShiftX){
