@@ -85,7 +85,7 @@ double		block_y[I]={
     /*‚±‚±‚©‚çŠK’iƒuƒƒbƒN*/0,0,0,0,1,1,1,2,2,3,0,0,0,0,1,1,1,2,2,3,0,0,0,0,0,1,1,1,1,2,2,2,3,3,0,0,0,0,1,1,1,2,2,3,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,5,5,5,5,6,6,6,7,7
 };
 double      dblock_x[D] = { 18.5,28.5,36.5,47.5,153.5,169.5 };
-double      dblock_height[D] = { 2,3,4,4,2,2 };
+double      dblock_height[D] = { 2,3,4,4,2,2 };//“yŠÇ‚Í‚‚³‚ðŠi”[D•`‰æ‚ÌÛ‚Í‚±‚Ì”’l‚ð/2-0.5‚µ‚ÄyÀ•W‚Æ‚·‚é
 double		block_z[I]={0};
 double		enemy_x[J]={0};	
 double		enemy_y[J]={0};	
@@ -348,6 +348,18 @@ void display(void)
     
   }
 
+  //ƒS[ƒ‹Šø‚Ì•`‰æ
+  glPushMatrix();
+  glTranslatef(188, 4, 0);
+  glColor3f(255, 255, 0);//ƒ|[ƒ‹•”•ª
+  mySolidCylinder(0.1, 10, 24);
+  glColor3f(255, 255, 255);//Šø‚ÌŽOŠp•”•ª
+  glTranslatef(0.5, 4, 0);
+  glRotatef(90, 1, 0, 0);
+  mySolidCylinder(1, 0.1, 3);
+  glRotatef(-90, 1, 0, 0);
+  glPopMatrix();
+
   glDisable(GL_DEPTH_TEST);
   glPopMatrix ();                   
   glutSwapBuffers();
@@ -396,9 +408,6 @@ void timer(int value)
 	 mini	=	block_y[i]+1;
 	 fall	=	0;
 	 fall_p	=	block_x[i];
-	 if(i==I-1){
-	   die_flag=2;
-	 }
        }
 
        // —Ž‰º”»’è
@@ -477,6 +486,11 @@ void timer(int value)
      if(Cube.ShiftX>-10 && Cube.ShiftY==-6){
        die_flag=0;  
      }
+
+     // ƒS[ƒ‹”»’è
+     if (Cube.ShiftX > 187.5 && Cube.ShiftX < 188.5 && Cube.ShiftY > -1 && Cube.ShiftY < 10) {
+         die_flag = 2;
+     }
 		  
      // “G‚Æ‚Ì“–‚½‚è”»’è
      for(i=0;i<J;i++){
@@ -553,6 +567,11 @@ void keyboard(unsigned char key, int x, int y )
   case 's':
     die_flag=1;
     break;
+
+    //ŠJ”­Žž—pƒVƒ‡[ƒgƒJƒbƒg
+  //case 't':
+  //    Cube.ShiftX = 160;
+  //    Cube.ShiftY = 0;
   }
   glutPostRedisplay();
   
