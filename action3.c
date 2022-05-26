@@ -218,7 +218,7 @@ void display(void)
     glPushMatrix();
     glColor3f(0.39, 0.58, 0.93);
     glTranslatef(Cube.ShiftX, Cube.ShiftY, Cube.ShiftZ + 5);
-    glutSolidSphere(15, 10, 10);  //solidCubeだと角の部分が黒く見える．sphereも若干見えるけど少しまし？
+    glutSolidSphere(14.5, 10, 10);  //solidCubeだと角の部分が黒く見える．sphereも若干見えるけど少しまし？
     glPopMatrix();
 
     // 初期状態(文字の描画)
