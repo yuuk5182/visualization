@@ -29,7 +29,7 @@
 #define I 363
 
 // 敵数
-#define	J	7
+#define	J	40
 #define RAD (M_PI / 180.0)
 
 //mySolidSylinder用
@@ -522,11 +522,11 @@ void timer(int value)
            enemy_z[i] += 0.0025;
            if (enemy_x[i] > 0) {
                enemy_y[i] = 1 + rand() % 8;
-               enemy_x[i] = enemy_x[i] - 30;
+               enemy_x[i] = enemy_x[i] - 170;
            }
            if (enemy_z[i] > 5) {
                enemy_y2[i] = 1 + rand() % 8;
-               enemy_x2[i] = 10 + rand() % 10;
+               enemy_x2[i] = 10 + rand() % 170;
                enemy_z[i] = -5;
            }
        }
@@ -699,23 +699,16 @@ void timer(int value)
      Cube.RotateY = 0;
      Cube.RotateZ = 0;
 
-     //空中ブロック数確認のため
-     //int length = sizeof(block_x) / sizeof(block_x[0]);
-     //printf("空中ブロックの数: %d\n",length);
-
-     //int flength = sizeof(fblock_x) / sizeof(fblock_x[0]);
-     //printf("床ブロックの数: %d\n", flength);
-
-     // 敵位置(青)の初期化
+     // 横から来るの初期化
      for (i = 0; i < J; i++) {
-         enemy_x[i] = 30 + rand() % 30;
+         enemy_x[i] = -30 + rand() % 100;
          enemy_y[i] = rand() % 10;
      }
 
-     // 敵位置(緑)の初期化
+     // 奥からくる敵の初期化
      for (i = 0; i < J; i++) {
          enemy_z[i] = -5 + rand() % 10;
-         enemy_x2[i] = 10 + rand() % 10;
+         enemy_x2[i] = 10 + rand() % 100;
          enemy_y2[i] = rand() % 10;
      }
 
