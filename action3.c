@@ -488,7 +488,7 @@ void timer(int value)
      }
 
      // ƒS[ƒ‹”»’è
-     if (Cube.ShiftX > 187.5 && Cube.ShiftX < 188.5 && Cube.ShiftY > -1 && Cube.ShiftY < 10) {
+     if (Cube.ShiftX > 187.5 && Cube.ShiftX < 188.5 && Cube.ShiftY > -1 && Cube.ShiftY < 9) {
          die_flag = 2;
      }
 		  
